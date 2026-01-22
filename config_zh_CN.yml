@@ -1,0 +1,484 @@
+#----------------------------------------------------------------------------------------------------------------------#
+#
+#                                              🥒 泡菜游戏 (PickleGames) 🥒
+#
+#    感谢您下载泡菜游戏！这个插件旨在创建有趣、高质量的游戏，可以在几秒钟内安装到任何世界。
+#    尝试台球、贪吃蛇、扫雷、足球等 11 种精彩游戏！
+#
+#    如果您需要帮助或有问题，请加入 Discord：https://discord.gg/yx9hUByTzq
+#    您也可以查看 Wiki 页面获取技术信息：https://github.com/Unfaxed/lobbygames_wiki/wiki/Getting-Started
+#
+#    如果您喜欢这个插件，请考虑为它写一个评论 :D
+#
+#    权限节点：
+#      - picklegames.command: 使用 /pg tp, /pg list 的能力，以及在游戏中绕过被阻止的命令列表
+#      - picklegames.kickplayer: 使用 /pg kick <玩家> 的能力
+#      - picklegames.admin: 创建/删除竞技场和清除排行榜的能力
+#      - (兼容旧版 lobbygames.* 权限)
+#
+#----------------------------------------------------------------------------------------------------------------------#
+
+
+no-permission: "&c你没有权限！"
+interworld-teleportation-enabled: true #allow a player in world A to join a lobby game in world B (disable if you have multiple lobby worlds on the same server)
+
+leaderboard-size: 5
+leaderboard-title: "&2&l%game% 排行榜："
+leaderboard-format: "&b%ranking%: &a%player% &6%score%"
+leaderboard-entry-expiration: -1 #number of days a leaderboard entry will last, -1 for no expiry
+merge-leaderboard-scores: true #if false, a new entry will be made for each time a player scores on the leaderboard
+use-display-names: true #if true, shows scoreboard rank prefixes on the leaderboard
+disable-holograms: false #if you plan on using PlaceholderAPI with a different holograms plugin
+
+cooldown-msg: "&c你必须等待 %seconds% 秒才能执行此操作！"
+cooldown-seconds: 3 #the number of seconds a player must wait until they can rejoin a game
+afk-kick-seconds: 90 #simple afk check if player does not move for too long. Set to -1 to disable
+return-to-game-spawn: true #if false, player is teleported to where they were standing before starting the game
+countdown-format: "&e游戏将在 &c%seconds% &e秒后开始！"
+waiting-players: "&c等待更多玩家加入..."
+quit-item-title: "&c&l退出"
+quit-item-material: "ARROW"
+
+error-already-in-game: "&4错误：&c你已经在游戏中了，使用 /lg quit 退出"
+error-must-be-in-game: "&4错误：&c你必须在游戏中才能执行此操作！"
+error-no-arenas-available: "&4错误：&c此游戏没有可用的竞技场！"
+error-arena-in-use: "&4错误：&c此竞技场已被占用！"
+error-arena-not-exist: "&4错误：&c此竞技场不存在！"
+error-wrong-world: "&4错误：&c你无法从此世界访问此竞技场！"
+not-enough-balance: "&c此游戏需要花费 $%cost% 才能游玩！"
+restart-confirmation: "&c你确定要重新开始吗？"
+status-translate: "开放, 等待中, 使用中" #Default (keep the commas): "Open, Waiting, In Use"
+afk-kick-msg: "&c你因挂机被踢出 %game%！"
+yes-text: "&a&l是"
+no-text: "&c&l否"
+your-turn-msg: "&a你的回合"
+opponent-turn-msg: "&7对手的回合"
+not-your-turn-msg: ""
+
+mysql: #Optionally set environment variables LOBBYGAMES_MYSQL_USERNAME, LOBBYGAMES_MYSQL_PASSWORD, LOBBYGAMES_MYSQL_HOST, LOBBYGAMES_MYSQL_NAME
+  enabled: false
+  username: "username"
+  password: "password"
+  host: "localhost:3306"
+  name: "database"
+
+#Blocked commands apply to players who are in a Lobby Game and don't have the lobbygames.command permission
+command-blocked-msg: "&c你在游戏中无法使用此命令！"
+command-block-mode: 1 #0: Command Blocking Disabled,  1: Only listed commands are blocked,  2: All commands blocked unless on the list
+command-block-list:
+ - "tpa"
+ - "tpahere"
+ - "tpaccept"
+
+2048:
+  game-alias: "2048" #translatable game name
+  action-bar: "&a分数：&f%score%"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l2048：&b使用 W、A、S、D 键合并方块，在填满棋盘前达到 2048 方块！
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &b&l没有可用的移动了！&b分数：&f %score% 点
+    &3&m----------------------------------------
+  reset-on-end: false
+
+clicker:
+  game-alias: "点击游戏" #translatable game name
+  blocks-per-game: 40 #every game will create x blocks, each block is randomly green or red. Default: 40
+  seconds-in-air: 2.5 #adjust the speed of the block. Default: 2.5s
+  start-msg: ""
+  green-blocks: "&a点击！"
+  red-blocks: "&c不要点击！"
+  score-format: "&a&l分数：&f&l%score% &6(剩余 %remaining%)"
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l分数：&f%score%
+    &2&m----------------------------------------
+  
+connect4:
+  game-alias: "四子棋" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  particles-enabled: true
+  translatable-words: "红色, 黄色"
+  side-msg: "&b你正在使用 %side% 棋子！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l四子棋：&b在棋盘顶部添加棋子，尝试在任意行、列或对角线上连接 4 个你的颜色！
+    &3&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&l这局游戏平局！
+    &2&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了四子棋游戏！
+    &6&m----------------------------------------
+  reset-on-end: false
+
+minesweeper:
+  game-alias: "扫雷" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-xcommand-on-end for %winner%
+  player-can-fly: true #Recommended, flying lets player see more clearly
+  flag-armor-stands-enabled: true #Landmine flag decoration
+  landmine-distribution: 0.1666 #Number of landmines per cell. Recommended between 0.14 (easy) and 0.2 (hard)
+  wand-title: "&c&l设置旗帜"
+  action-bar: "&4&l%remaining_mines%&c 个地雷剩余！&c&l%time%"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l扫雷：&b网格中随机分布了 %starting_mines% 个地雷！右键打开格子，使用旗帜工具标记地雷。数字表示该格子周围有多少个地雷！
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &c&l轰！你点到地雷了！
+    &b分数：&f%minutes% 分 %seconds% 秒（剩余 %remaining_mines% 个地雷）
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l你赢了！
+    &a分数：&f%minutes% 分 %seconds% 秒
+    &2&m----------------------------------------
+  reset-on-end: false
+
+pool:
+  game-alias: "台球" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  practice-mode-enabled: true
+  proximity-joining: false #Players automatically join pool if they walk near the table
+  same-color: false #if enabled, makes all balls of a given side the same color (Change "Wool" and "Terracotta" to the colors in the translatable-words entry)
+  solids-color: YELLOW #if same-color is enabled. #Values: #RED, ORANGE, YELLOW, LIME, GREEN, CYAN, BLUE, LIGHT_BLUE, MAGENTA, PURPLE, PINK, BROWN, LIGHT_GRAY, GRAY
+  stripes-color: RED #if same-color is enabled
+  cue-blaze-rod: false #alternate cue item
+  particles-enabled: true
+  translatable-words: "球, 母球, 入袋, 羊毛, 陶瓦" #Default (Keep the commas): "Ball, Cue Ball, Pocketed, Wool, Terracotta"
+  translatable-power-words: "&a低力量, &e中等力量, &6高力量, &c最高力量"
+  pocketed-8ball: "&c8号球入袋了！"
+  pocketed-all-balls: "&a所有球都入袋了！"
+  redo-break: "&b这次开球力量不够，再试一次！"
+  side-designation: "&b你需要将 &b&l%side%&b 球打入袋中！"
+  cueball-title: "&f&l母球 &7(点击桌面任意位置)"
+  cueball-description: "&7用球杆击打这个球"
+  cueball-inhand: "&b%player% 拿到了母球！"
+  8ball-description: "&7在打入所有指定球后\n&7&c才能&7打入这个球！"
+  cue-item-title: "&3球杆 &7(点击白色母球)"
+  open-gui-item-title: "&b打开台球菜单"
+  gui-title: "台球状态"
+  practice-mode-msg: "&a等待对手时可以练习！"
+  exit-practice-mode: "&c退出练习模式"
+  pocket-radius: 0.35 #The minimum distance, in blocks, of how far away the center of a ball needs to be from the center of a pocket to count. Default 0.35.
+  circular-pockets: false #Set this to true if the pockets you use appear circular, such as if you are using a custom pool table (ex. resource pack or Dexterity setups). Default false.
+  pocketed-balls: |
+    &3%name% 打入了 %count% 个球：
+    &b  羊毛：&f%solids_pocketed%
+    &b  陶瓦：&f%stripes_pocketed%
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l台球：&b击打（白色）母球来打入其他球！在打入所有指定球之前不要打入（黑色）8号球。
+    &3&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了台球游戏！
+    &6&m----------------------------------------
+
+snake:
+  game-alias: "贪吃蛇" #translatable game name
+  action-bar: "&b%score% 个苹果"
+  head-material: "WHITE_CONCRETE"
+  body-material: "WHITE_WOOL"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l贪吃蛇：&b吃苹果来变长，但不要撞到墙壁或自己！使用 W、A、S、D 键移动！
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &c&l%reason%
+    &b分数：&f %score% 个苹果
+    &3&m----------------------------------------
+  hit-wall-msg: '&c&l你撞到墙了！'
+  ran-into-self-msg: '&c&l你撞到自己了！'
+
+soccer:
+  game-alias: "足球" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  proximity-joining: true #Players automatically join soccer if they walk into the arena
+  point-win-threshold: 5 #the number of goals a team needs to win
+  game-max-time: -1 #Units of seconds. If this is set, the game will end on the timer INSTEAD of when the point-win-threshold is reached. 
+  player-join-threshold: 2 #the minimum number of players that the game will start at
+  countdown-seconds: 20 #after the player threshold is met, how many seconds until the game starts
+  boost-jump-enabled: true
+  boost-jump-cooldown: 6 #seconds
+  spectators-enabled: true
+  ball-size: 3 #Minimum 2, maximum 12, default 3
+  ball-speed: 2 #Minimum 1, maximum 6, default 2
+  action-bar: "%score%" #add %timer% placeholder if you are using game-max-time entry
+  boost-jump-title: "&a&l加速跳跃 &7(右键)"
+  ball-respawn-delay: 4 #number of seconds after a goal is scored for the ball to drop
+  ball-respawn-msg: "&e球将在 &c%seconds% &e秒后重生！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l足球：&b将球踢进对方球门得分！先得 10 分获胜！
+    &3&m----------------------------------------
+    &a游戏开始了！"
+  team1-join-title: "&b加入蓝队 &7(右键)"
+  team1-wool-title: "&b你在 &b&l蓝队&b！"
+  team1-score-msg: "&9&l蓝队进球了！&7[ %score% &7]"
+  team1-win-msg: |
+    &3&m----------------------------------------
+    &b蓝队赢得了比赛！
+    &3&m----------------------------------------
+  team2-join-title: "&c加入红队 &7(右键)"
+  team2-wool-title: "&c你在 &c&l红队&c！"
+  team2-score-msg: "&c&l红队进球了！&7[ %score% &7]"
+  team2-win-msg: |
+    &4&m----------------------------------------
+    &c红队赢得了比赛！
+    &4&m----------------------------------------
+  score-format: "&9&l%team1_score%&7&l - &c&l%team2_score%"
+  
+spleef:
+  game-alias: "雪地大战" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  countdown-seconds: 30
+  melt-delay: 50 #how many seconds the game should wait until blocks start melting under players' feet (enter -1 for no melting)
+  proximity-joining: true #Players automatically join spleef if they walk into the arena
+  spectators-enabled: true
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l雪地大战：&b使用铲子破坏雪块，不要掉到表面以下！最后站立的人获胜！
+    &3&m----------------------------------------
+  player-eliminated-msg: "&e%eliminated_player% &c被淘汰了！&6还剩 %remaining% 名玩家！"
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了雪地大战！
+    &6&m----------------------------------------
+  blocks-melting-msg: "&c方块开始融化了！"
+  blocks-melting-seconds-msg: "&e方块将在 &c%seconds%&e 秒后开始融化！"
+  
+sudoku:
+  game-alias: "数独" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  player-can-fly: true #Recommended, flying lets the player see more clearly
+  particles-enabled: true
+  prefilled-count: 45 #set difficulty
+  reset-on-end: false
+  action-bar: "&a时间：&f%time%"
+  invalid-solution: "&c无效的解答！" #if all spaces are filled but not a correct sudoku
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l数独：&b填入数字，使每行、每列和每个 3x3 方格都包含 1 到 9 的所有数字！
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l你完成了数独！&a时间：%time%
+    &2&m----------------------------------------
+  
+tictactoe:
+  game-alias: "井字棋" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  join-side-title: "&b切换到 %side%"
+  now-playing-as: "&b你将使用 %side%！"
+  side-msg: "&b你正在使用 %side%！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l井字棋：&b连成三个 X 或三个 O 即可获胜！
+    &3&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&l这局游戏平局！
+    &2&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了井字棋游戏！
+    &6&m----------------------------------------
+
+memory:
+  game-alias: "记忆翻牌" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l记忆翻牌：&b点击方块找到配对的颜色！
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l恭喜完成！
+    &a时间：&f%time% 秒
+    &a移动次数：&f%moves%
+    &2&m----------------------------------------
+  reset-on-end: false
+
+gomoku:
+  game-alias: "五子棋" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  black-material: "BLACK_CONCRETE"
+  white-material: "WHITE_CONCRETE"
+  side-msg: "&b你正在使用 %side%！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l五子棋：&b在棋盘上连成五个同色棋子即可获胜！
+    &3&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了五子棋游戏！
+    &6&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&l这局游戏平局！
+    &2&m----------------------------------------
+  reset-on-end: false
+
+pg-join-command-enabled: true #without /pg join, players can only join via the console running /pgjoinplayer or via clickable signs
+alias-commands-enabled: true #whether /soccer, /2048, /snake, etc. should be enabled
+join-sign-text: "加入"
+
+# ===== 命令消息汉化 =====
+cmd-version: "&d🥒 &b正在使用泡菜游戏 v%version%"
+cmd-help-hint: "&a使用 &d/pg help &a查看帮助！"
+cmd-reload-success: "&d🥒 &b泡菜游戏已重新加载！"
+
+# 帮助命令
+cmd-help-title: "\n&d&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n&d&l🥒 泡菜游戏命令帮助 🥒\n&d&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cmd-help-join: "&e▶ &b/pg join <游戏> [竞技场ID] &7- 加入游戏"
+cmd-help-restart: "&e▶ &b/pg restart &7- 重新开始游戏"
+cmd-help-quit: "&e▶ &b/pg quit &7- 退出当前游戏"
+cmd-help-list: "&e▶ &b/pg list [游戏] &7- 查看竞技场列表 &8(picklegames.command)"
+cmd-help-tp: "&e▶ &b/pg tp <游戏> <竞技场ID> &7- 传送到竞技场 &8(picklegames.command)"
+cmd-help-kick: "&e▶ &b/pg kick <玩家> &7- 踢出玩家 &8(picklegames.kickplayer)"
+cmd-help-clearstands: "&e▶ &b/pg clearstands <游戏> <竞技场ID> &7- 清除盔甲架 &8(picklegames.admin)"
+cmd-help-create: "&e▶ &b/pg create <游戏> &7- 创建竞技场 &8(picklegames.admin)"
+cmd-help-delete: "&e▶ &b/pg delete <游戏> <竞技场ID> &7- 删除竞技场 &8(picklegames.admin)"
+cmd-help-leaderboard: "&e▶ &b/pg leaderboard <create;clear;delete> <游戏> &7- 排行榜管理 &8(picklegames.admin)"
+cmd-help-reload: "&e▶ &b/pg reload &7- 重新加载配置 &8(picklegames.admin)"
+cmd-help-gui: "&e▶ &b/pg gui &7- 打开管理界面 &8(picklegames.admin) &d&l✨新功能"
+
+# 排行榜命令消息
+cmd-lb-title: "&d&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n&6&l🏆 排行榜命令 🏆\n&d&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cmd-lb-create-cmd: "&e▶ &b/pg leaderboard create <游戏> &7- 创建全局排行榜"
+cmd-lb-clearplayer-cmd: "&e▶ &b/pg leaderboard clearplayer <玩家> <游戏> &7- 清除玩家记录"
+cmd-lb-clear-cmd: "&e▶ &b/pg leaderboard clear <游戏> &7- 清除排行榜"
+cmd-lb-delete-cmd: "&e▶ &b/pg leaderboard delete <游戏> [id] &7- 删除排行榜"
+cmd-lb-note: "&7此命令仅适用于全局排行榜"
+
+# 错误消息
+cmd-error-invalid-game-type: "&c✖ 错误：&7'%game%' 不是有效的游戏类型！"
+cmd-error-not-number: "&c✖ 错误：&7'%value%' 不是数字！"
+cmd-error-arena-not-found: "&c✖ 错误：&7没有 ID 为 %id% 的 %game% 竞技场！"
+cmd-error-join-disabled: "&c✖ 错误：&7此命令在配置中已禁用 (pg-join-cmd-enabled)"
+cmd-error-arena-in-progress: "&c✖ 错误：&7此竞技场有正在进行的游戏！"
+cmd-error-delete-failed: "&c✖ 错误：&7无法删除此竞技场！"
+cmd-error-confirm-expired: "&c✖ 错误：&7此确认已过期！"
+cmd-error-not-editing: "&c✖ 错误：&7你必须处于编辑模式才能执行此操作！使用 &e/pg create"
+cmd-error-coords-invalid: "&c✖ 错误：&7坐标无效（设置阶段未捕获的错误）"
+cmd-error-player-not-in-game: "&c✖ 错误：&7%player% 不在游戏中！"
+cmd-error-player-offline: "&c✖ 错误：&7此玩家不在线！"
+cmd-error-unknown-game: "&c✖ 错误：&7未知的游戏 '%game%'"
+cmd-error-no-local-leaderboard: "&c✖ 错误：&7此竞技场没有本地排行榜！"
+cmd-error-leaderboard-exists: "&c✖ 错误：&7此位置已经有一个排行榜！"
+cmd-error-player-not-found: "&c✖ 错误：&7找不到玩家 '%player%'！"
+cmd-error-no-global-leaderboards: "&c✖ 错误：&7此游戏类型没有全局排行榜！"
+cmd-error-leaderboard-not-exist: "&c✖ 错误：&7全局排行榜 #%id% 不存在于此游戏类型！"
+
+# 用法消息
+cmd-usage-join: "&e用法：&7/pg join <游戏> [竞技场ID]"
+cmd-usage-delete: "&e用法：&7/pg delete <游戏> <竞技场ID>"
+cmd-usage-create: "&e用法：&7/pg create <游戏类型>"
+cmd-usage-tp: "&e用法：&7/pg tp <游戏> <竞技场ID>"
+cmd-usage-kick: "&e用法：&7/pg kick <玩家>"
+cmd-usage-set: "&e用法：&7\"/pg set\" 或 \"/pg set leaderboard\""
+cmd-usage-lb-create: "&e用法：&7/pg leaderboard create <游戏>"
+cmd-usage-lb-clearplayer: "&e用法：&7/pg leaderboard clearplayer <玩家> <游戏>"
+cmd-usage-lb-clear: "&e用法：&7/pg leaderboard clear <游戏> [id]"
+cmd-usage-lb-delete: "&e用法：&7/pg leaderboard delete <游戏> [id]"
+
+# 警告消息
+cmd-warning-arena-active: "&6警告：&e此竞技场当前有正在进行的游戏。"
+cmd-warning-id-shift: "&6警告：&e所有 ID 大于 %id% 的 %game% 竞技场将向下移动 1 位！"
+
+# 成功消息
+cmd-clearstands-success: "&a✔ 已清除此竞技场的盔甲架"
+cmd-delete-confirm: "&c你确定要删除此竞技场吗？输入 &e/pg confirm"
+cmd-delete-success: "&b✔ 竞技场已删除。注意：所有 ID 更大的 %game% 竞技场已向下移动 1 位。"
+cmd-deleted-unfinished: "&7已删除未完成的竞技场（类型：%type%）"
+cmd-set-location-success: "&a✔ 成功设置 &b%type%&a 位置！"
+cmd-save-success: "&d🥒 &2成功！&a使用 &b/pg join %game%%id%&a 测试此竞技场"
+cmd-quit-editing: "&7已放弃未完成的竞技场数据，退出编辑模式。"
+cmd-kick-player: "&7你被 %player% 踢出了游戏"
+cmd-kick-success: "&a✔ 成功将 %player% 踢出游戏！"
+cmd-list-summary: "&d🥒 &a泡菜游戏竞技场摘要："
+cmd-list-game-count: "&b%game%：&3%count% 个竞技场"
+cmd-list-game-arenas: "&d🥒 &a泡菜游戏 %game% 竞技场："
+cmd-list-arena-info: "&a#%id%：&b'&o%world%&b'%coords%"
+cmd-lb-create-success: "&a✔ 成功为 %game% 添加了全局排行榜"
+cmd-lb-clearplayer-success: "&a✔ 已从 %game% 排行榜中移除 %player%！"
+cmd-lb-clear-local-success: "&a✔ 成功清除此竞技场的本地排行榜！"
+cmd-lb-clear-global-success: "&a✔ 成功清除 %game% 的全局排行榜"
+cmd-lb-delete-success: "&a✔ 成功删除此竞技场的本地排行榜！"
+cmd-lb-delete-global-success: "&a✔ 成功删除 %game% 的全局排行榜"
+cmd-error-unknown-subcommand: "&c✖ 未知的子命令。"
+cmd-usage-clearboard: "&e用法：&7/pg clearboard <游戏> <竞技场ID> &8(重置排行榜)"
+cmd-error-unknown-command: "&c✖ 未知的命令。"
+cmd-error-must-be-player: "&c✖ 你必须是玩家才能执行此操作！"
+cmd-error-alias-disabled: "&c✖ 错误：&7泡菜游戏别名命令在配置中已禁用！(alias-commands-enabled)"
+
+# ===== 竞技场创建消息 =====
+create-editing-mode: "\n&b你现在处于编辑模式！使用 &n/lg quit&b 退出。"
+create-step1: "&2步骤 1：&a前往竞技场的 &b%location%&a 并运行 &b/lg set"
+create-step2-spawn: "&2步骤 2：&a前往竞技场的 &b出生点&a 并运行 &b/lg set"
+create-step2-topright: "&2步骤 2：&a前往竞技场的 &b右上角&a 并运行 &b/lg set"
+create-step3-spawn: "&2步骤 3：&a前往竞技场的 &b出生点&a 并运行 &b/lg set"
+create-step4-soccer-net: "&2步骤 4：&a前往 &b红色足球网&a 的 &b右上角&a 并运行 &b/lg set"
+create-step5-net-corner: "&2步骤 5：&a前往同一球网的 &b左下角&a 并运行 &b/lg set"
+create-locations-set: "&2位置已设置！"
+create-locations-set-leaderboard: "&2位置已设置！&a要为此竞技场添加本地排行榜，使用 &b/lg set leaderboard"
+create-add-leaderboard-hint: "&a要为此竞技场添加本地排行榜，使用 &b/lg set leaderboard"
+create-important-save: "&c&l重要：&a不要忘记使用 &b/lg save&a 保存此竞技场！"
+create-all-set-save: "&a所有位置已设置，确保使用 &b/lg save&a 保存新竞技场"
+create-error-points-not-set: "&4错误：&c并非所有点都已设置！"
+create-error-invalid-coords: "&4错误：&c此坐标无效。坐标必须构成同一世界中平面正方形的 2 个角。"
+create-error-must-be-flat: "&4错误：&c此游戏类型要求竞技场必须在地面上平铺。"
+create-error-sudoku-size: "&4错误：&c数独必须是 9x9 竞技场"
+create-error-tictactoe-size: "&4错误：&c井字棋必须是 3x3 竞技场"
+create-error-pool-size: "&4错误：&c台球必须是 3x4 或 3x5 大小！"
+create-error-must-be-vertical: "&4错误：&c此游戏必须是垂直的（在墙上）！"
+create-error-min-size: "&4错误：&c最小宽度和高度为 6 格！（推荐大小为 7x6）"
+create-error-max-size: "&4错误：&c最大宽度和高度为 50 格！（推荐大小为 7x6）"
+create-error-too-small: "&4错误：&c此游戏的宽度和高度必须至少为 %size% 格。"
+create-error-too-large: "&4错误：&c竞技场宽度不能大于 %size% 格！"
+create-note-no-second-location: "&6注意：&e此游戏不需要第二个位置！"
+create-error-net-outside: "&4错误：&c足球网的角必须在竞技场选区之外！"
+create-error-net-height: "&4错误：&c球网必须至少 3 格高！（此位置应该离地面有一定高度）"
+create-error-corners-first: "&4错误：&c必须先定义竞技场的角！"
+create-error-no-special-location: "&4错误：&c此游戏类型不使用此位置。"
+create-error-net-neighbor: "&4错误：&c球网位置之一必须与竞技场相邻！"
+create-error-same-y-level: "&4错误：&c此位置必须与竞技场地面处于相同的 Y 值！"
+create-error-corners-before-spawn: "&4错误：&c必须先设置竞技场的角才能设置出生点！"
+create-error-spawn-inside: "&4错误：&c出生点不能在竞技场内部！（这是被淘汰玩家传送的位置。）"
+create-error-center-before-spawn: "&4错误：&c必须先设置竞技场中心点才能设置点击游戏出生点！"
+create-error-spawn-same-as-center: "&4错误：&c出生点不能与中心点相同！"
+create-error-location1-view: "&4错误：&c位置 1 必须是相对于玩家视角的&o左下角&c位置"
+create-error-no-local-leaderboard-multiplayer: "&4错误：&c多人游戏不支持本地排行榜。"
+
+# ===== 控制台命令消息 =====
+console-error-player-offline: "&4错误：&c%player% 不在线！"
+console-usage-forcejoin: "&4用法：&c/%command% <玩家> <游戏> [竞技场ID]"
+#----------------------------------------------------------------------------------------------------------------------#
+#
+#  [JOIN] 告示牌：
+#  要创建可点击的告示牌来加入竞技场，请使用以下格式：
+#    |                   |
+#    |       [JOIN]      |
+#    | <游戏类型>:<数据>  |
+#    |                   |
+#  对于 <数据> 部分，可以使用以下内容：
+#    情况 A：加入第一个可用的竞技场（默认，如果 <数据> 留空）
+#    情况 B：加入相对于告示牌位置最近的竞技场
+#    [数字]：加入特定的竞技场 ID（例如："井字棋:4"）
+#
+#  示例：（加入最近的足球竞技场）
+#    |                   |
+#    |       [JOIN]      |
+#    |      Soccer:B     |
+#    |                   |
+#
+#----------------------------------------------------------------------------------------------------------------------#
+
+#如果您喜欢这个插件，请留下评论 :D

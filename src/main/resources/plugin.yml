@@ -1,0 +1,32 @@
+name: PickleGames
+version: ${project.version}
+author: c7dev
+main: me.c7dev.lobbygames.LobbyGames
+load: POSTWORLD
+api-version: 1.13
+softdepend: [PlaceholderAPI, Vault]
+
+commands:
+  picklegames:
+    description: 泡菜游戏主命令
+    aliases: [pg, 泡菜, pickle, 游戏, games, minigames]
+  pgjoin:
+    description: 直接加入泡菜游戏
+    aliases: [加入游戏, 点击游戏, 扫雷, 贪吃蛇, 足球, 雪地大战, 数独, 井字棋, 台球, 四子棋, 记忆翻牌, clicker, minesweeper, snake, soccer, football, spleef, sudoku, soduko, 2048, tictactoe, tic, ttt, pool, minesw, connect4, memory]
+  pgjoinplayer:
+    description: 控制台命令：将玩家送入游戏
+    aliases: [pgforcejoin]
+    
+permissions:
+  picklegames.command:
+    description: 访问 /pg list, /pg tp 命令
+    default: op
+  picklegames.kickplayer:
+    description: 访问 /pg kick 命令
+    default: op
+  picklegames.forcejoin:
+    description: 访问 /pgjoinplayer 命令
+    default: op
+  picklegames.admin:
+    description: 访问 /pg leaderboard, /pg create, /pg delete 命令
+    default: op

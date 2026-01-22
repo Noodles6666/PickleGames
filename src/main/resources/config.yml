@@ -1,0 +1,464 @@
+#----------------------------------------------------------------------------------------------------------------------#
+#
+#                                                      Lobby Games
+#
+#    Thank you for downloading LobbyGames! This plugin is intended to create fun, high quality games that can be installed
+#    on any world in seconds. Try Pool, Snake, Minesweeper, Slime Soccer, and more!
+#
+#    If you need help or have a question, join the discord: https://discord.gg/yx9hUByTzq
+#    You can also check the wiki page for technical information: https://github.com/Unfaxed/lobbygames_wiki/wiki/Getting-Started
+#
+#    Please consider writing a review for this plugin if you like it :D
+#
+#    Permissions:
+#      - lobbygames.command: Ability to use /lg tp, /lg list, and bypass blocked command list while playing
+#      - lobbygames.kickplayer: Ability to use /lg kick <player>
+#      - lobbygames.admin: Ability to create/delete arenas and clear leader boards
+#
+#----------------------------------------------------------------------------------------------------------------------#
+
+
+no-permission: "&cYou don't have permission!"
+interworld-teleportation-enabled: true #allow a player in world A to join a lobby game in world B (disable if you have multiple lobby worlds on the same server)
+
+leaderboard-size: 5
+leaderboard-title: "&2&l%game% Leaderboard:"
+leaderboard-format: "&b%ranking%: &a%player% &6%score%"
+leaderboard-entry-expiration: -1 #number of days a leaderboard entry will last, -1 for no expiry
+merge-leaderboard-scores: true #if false, a new entry will be made for each time a player scores on the leaderboard
+use-display-names: true #if true, shows scoreboard rank prefixes on the leaderboard
+disable-holograms: false #if you plan on using PlaceholderAPI with a different holograms plugin
+
+cooldown-msg: "&cYou must wait %seconds% second(s) to do this!"
+cooldown-seconds: 3 #the number of seconds a player must wait until they can rejoin a game
+afk-kick-seconds: 90 #simple afk check if player does not move for too long. Set to -1 to disable
+return-to-game-spawn: true #if false, player is teleported to where they were standing before starting the game
+countdown-format: "&eThe game will start in &c%seconds% &eseconds!"
+waiting-players: "&cWaiting for more players to join..."
+quit-item-title: "&c&lQuit"
+quit-item-material: "ARROW"
+
+error-already-in-game: "&4Error: &cYou are already in a game, use /lg quit"
+error-must-be-in-game: "&4Error: &cYou must be in a game to do this!"
+error-no-arenas-available: "&4Error: &cThere are no open arenas for this game!"
+error-arena-in-use: "&4Error: &cThis arena is already in use!"
+error-arena-not-exist: "&4Error: &cThis arena does not exist!"
+error-wrong-world: "&4Error: &cYou cannot access this arena from this world!"
+not-enough-balance: "&cThis game costs $%cost% to play!"
+restart-confirmation: "&cAre you sure you want to restart?"
+status-translate: "Open, Waiting, In Use" #Default (keep the commas): "Open, Waiting, In Use"
+afk-kick-msg: "&cYou were kicked from %game% for being afk!"
+yes-text: "&a&lYes"
+no-text: "&c&lNo"
+your-turn-msg: "&aYour Turn"
+opponent-turn-msg: "&7Opponent's Turn"
+not-your-turn-msg: ""
+
+mysql: #Optionally set environment variables LOBBYGAMES_MYSQL_USERNAME, LOBBYGAMES_MYSQL_PASSWORD, LOBBYGAMES_MYSQL_HOST, LOBBYGAMES_MYSQL_NAME
+  enabled: false
+  username: "username"
+  password: "password"
+  host: "localhost:3306"
+  name: "database"
+
+#Blocked commands apply to players who are in a Lobby Game and don't have the lobbygames.command permission
+command-blocked-msg: "&cYou cannot use this command while playing this game!"
+command-block-mode: 1 #0: Command Blocking Disabled,  1: Only listed commands are blocked,  2: All commands blocked unless on the list
+command-block-list:
+ - "tpa"
+ - "tpahere"
+ - "tpaccept"
+
+2048:
+  game-alias: "" #translatable game name
+  action-bar: "&aScore: &f%score%"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l2048: &bUse the W, A, S, and D keys to merge tiles and get to the 2048 tile without filling the board!
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &b&lRan out of moves! &bScore:&f %score% Points
+    &3&m----------------------------------------
+  reset-on-end: false
+
+clicker:
+  game-alias: "" #translatable game name
+  blocks-per-game: 40 #every game will create x blocks, each block is randomly green or red. Default: 40
+  seconds-in-air: 2.5 #adjust the speed of the block. Default: 2.5s
+  start-msg: ""
+  green-blocks: "&aClick!"
+  red-blocks: "&cDon't Click!"
+  score-format: "&a&lScore: &f&l%score% &6(%remaining% Remaining)"
+  win-msg: |
+    &2&m----------------------------------------
+    &a&lScore: &f%score%
+    &2&m----------------------------------------
+  
+connect4:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  particles-enabled: true
+  translatable-words: "Red, Yellow"
+  side-msg: "&bYou are playing as %side%!"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lConnect 4: &bAdd tiles to the top of the board and try to connect 4 of your color in any row, column, or diagonal!
+    &3&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&lThis game is a draw!
+    &2&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner%&e won the Connect 4 game!
+    &6&m----------------------------------------
+  reset-on-end: false
+
+minesweeper:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-xcommand-on-end for %winner%
+  player-can-fly: true #Recommended, flying lets player see more clearly
+  flag-armor-stands-enabled: true #Landmine flag decoration
+  landmine-distribution: 0.1666 #Number of landmines per cell. Recommended between 0.14 (easy) and 0.2 (hard)
+  wand-title: "&c&lSet Flag"
+  action-bar: "&4&l%remaining_mines%&c mines remaining! &c&l%time%"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lMinesweeper: &bThere are %starting_mines% landmines randomly spread through the grid! Right-click to open a cell, and use the flag tool to mark a landmine. The numbers represent how many mines a cell is touching!
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &c&lBOOM! You clicked a landmine!
+    &bScore: &f%minutes% Minutes, %seconds% Seconds (%remaining_mines% Mines Remaining)
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&lYou win!
+    &aScore: &f%minutes% minutes, %seconds% seconds
+    &2&m----------------------------------------
+  reset-on-end: false
+
+pool:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  practice-mode-enabled: true
+  proximity-joining: false #Players automatically join pool if they walk near the table
+  same-color: false #if enabled, makes all balls of a given side the same color (Change "Wool" and "Terracotta" to the colors in the translatable-words entry)
+  solids-color: YELLOW #if same-color is enabled. #Values: #RED, ORANGE, YELLOW, LIME, GREEN, CYAN, BLUE, LIGHT_BLUE, MAGENTA, PURPLE, PINK, BROWN, LIGHT_GRAY, GRAY
+  stripes-color: RED #if same-color is enabled
+  cue-blaze-rod: false #alternate cue item
+  particles-enabled: true
+  translatable-words: "Ball, Cue Ball, Pocketed, Wool, Terracotta" #Default (Keep the commas): "Ball, Cue Ball, Pocketed, Wool, Terracotta"
+  translatable-power-words: "&aLow Power, &eMedium Power, &6High Power, &cHighest Power"
+  pocketed-8ball: "&cThe 8-ball was pocketed!"
+  pocketed-all-balls: "&aAll balls were pocketed!"
+  redo-break: "&bThis break was not strong enough, try again!"
+  side-designation: "&bYou need to pocket the &b&l%side%&b balls!"
+  cueball-title: "&f&lCue Ball &7(Click anywhere on table)"
+  cueball-description: "&7Hit this with the cue"
+  cueball-inhand: "&b%player% has the cue ball in hand!"
+  8ball-description: "&7Pocket this &conly&7 after pocketing\n&7all of your other designated balls!"
+  cue-item-title: "&3Cue &7(Click the white cue ball)"
+  open-gui-item-title: "&bOpen Pool Menu"
+  gui-title: "Pool Ball Status"
+  practice-mode-msg: "&aPractice while you wait for an opponent!"
+  exit-practice-mode: "&cExit Practice Mode"
+  pocket-radius: 0.35 #The minimum distance, in blocks, of how far away the center of a ball needs to be from the center of a pocket to count. Default 0.35.
+  circular-pockets: false #Set this to true if the pockets you use appear circular, such as if you are using a custom pool table (ex. resource pack or Dexterity setups). Default false.
+  pocketed-balls: |
+    &3%name% pocketed %count% ball(s):
+    &b  Wool: &f%solids_pocketed%
+    &b  Terracotta: &f%stripes_pocketed%
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lPool: &bHit the (white) cue ball to pocket other balls! Don't hit the (black) 8-ball until all of your designated balls have been pocketed.
+    &3&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner%&e won the 8-Ball game!
+    &6&m----------------------------------------
+
+snake:
+  game-alias: "" #translatable game name
+  action-bar: "&b%score% Apple(s)"
+  head-material: "WHITE_CONCRETE"
+  body-material: "WHITE_WOOL"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lSnake: &bEat apples to grow larger, but don't run into the walls or yourself! Use the W, A, S, and D keys to move!
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &c&l%reason%
+    &bScore:&f %score% Apple(s)
+    &3&m----------------------------------------
+  hit-wall-msg: '&c&lYou hit a wall!'
+  ran-into-self-msg: '&c&lYou ran into yourself!'
+
+soccer:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  proximity-joining: true #Players automatically join soccer if they walk into the arena
+  point-win-threshold: 5 #the number of goals a team needs to win
+  game-max-time: -1 #Units of seconds. If this is set, the game will end on the timer INSTEAD of when the point-win-threshold is reached. 
+  player-join-threshold: 2 #the minimum number of players that the game will start at
+  countdown-seconds: 20 #after the player threshold is met, how many seconds until the game starts
+  boost-jump-enabled: true
+  boost-jump-cooldown: 6 #seconds
+  spectators-enabled: true
+  ball-size: 3 #Minimum 2, maximum 12, default 3
+  ball-speed: 2 #Minimum 1, maximum 6, default 2
+  action-bar: "%score%" #add %timer% placeholder if you are using game-max-time entry
+  boost-jump-title: "&a&lBoost Jump &7(Right-click)"
+  ball-respawn-delay: 4 #number of seconds after a goal is scored for the ball to drop
+  ball-respawn-msg: "&eThe ball will respawn in &c%seconds% &esecond(s)!"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lSoccer: &bPunch the ball into your team's net to win points! Get 10 points to win!
+    &3&m----------------------------------------
+    &aThe game has started!"
+  team1-join-title: "&bJoin blue team &7(Right-click)"
+  team1-wool-title: "&bYou are on the &b&lBLUE&b team!"
+  team1-score-msg: "&9&lBLUE team scored a goal! &7[ %score% &7]"
+  team1-win-msg: |
+    &3&m----------------------------------------
+    &bBLUE team won the game!
+    &3&m----------------------------------------
+  team2-join-title: "&cJoin red team &7(Right-click)"
+  team2-wool-title: "&cYou are on the &c&lRED&c team!"
+  team2-score-msg: "&c&lRED team scored a goal! &7[ %score% &7]"
+  team2-win-msg: |
+    &4&m----------------------------------------
+    &cRED team won the game!
+    &4&m----------------------------------------
+  score-format: "&9&l%team1_score%&7&l - &c&l%team2_score%"
+  
+spleef:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  countdown-seconds: 30
+  melt-delay: 50 #how many seconds the game should wait until blocks start melting under players' feet (enter -1 for no melting)
+  proximity-joining: true #Players automatically join spleef if they walk into the arena
+  spectators-enabled: true
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lSpleef: &bUse the shovel to break the snow blocks and don't fall below the surface! The last one standing wins!
+    &3&m----------------------------------------
+  player-eliminated-msg: "&e%eliminated_player%&c was eliminated! &6%remaining% players remaining!"
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner%&e won the Spleef game!
+    &6&m----------------------------------------
+  blocks-melting-msg: "&cBlocks are now melting!"
+  blocks-melting-seconds-msg: "&eBlocks melting in &c%seconds%&e seconds!"
+  
+sudoku:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  player-can-fly: true #Recommended, flying lets the player see more clearly
+  particles-enabled: true
+  prefilled-count: 45 #set difficulty
+  reset-on-end: false
+  action-bar: "&aTime: &f%time%"
+  invalid-solution: "&cInvalid Solution!" #if all spaces are filled but not a correct sudoku
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lSudoku: &bSet the numbers in the puzzle so every row, column, and 3x3 box has one of each digit from 1 to 9!
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&lYou finished the sudoku! &aTime: %time%
+    &2&m----------------------------------------
+  
+tictactoe:
+  game-alias: "" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  join-side-title: "&bSwitch to %side%&b's"
+  now-playing-as: "&bYou will play as %side%&b's!"
+  side-msg: "&bYou are playing as %side%&b's!"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lTic Tac Toe: &bGet three X's or three O's in a row to win!
+    &3&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&l This game is a draw!
+    &2&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner%&e won the Tic Tac Toe game!
+    &6&m----------------------------------------
+
+memory:
+  game-alias: "Memory" #translatable game name
+  wager-cost: 0 #requires Vault, make sure to set an 'eco give' command in console-command-on-end for %winner%
+  start-msg: |
+    &3&m----------------------------------------
+    &b&lMemory: &bClick blocks to find matching color pairs!
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&lCongratulations!
+    &aTime: &f%time% seconds
+    &aMoves: &f%moves%
+    &2&m----------------------------------------
+  reset-on-end: false
+
+lg-join-command-enabled: true #without /lg join, players can only join via the console running /lgjoinplayer or via clickable signs
+alias-commands-enabled: true #whether /soccer, /2048, /snake, etc. should be enabled
+join-sign-text: "JOIN"
+
+# ===== Command Messages =====
+cmd-version: "&d🥒 &bUsing PickleGames v%version%"
+cmd-help-hint: "&aUse &d/pg help&a for help!"
+cmd-reload-success: "&d🥒 &bPickleGames has been reloaded!"
+
+# Help command
+cmd-help-title: "\n&3&lLobbyGames Commands:"
+cmd-help-join: "&b/lg join <game> [arena ID]"
+cmd-help-restart: "&b/lg restart"
+cmd-help-quit: "&b/lg quit"
+cmd-help-list: "&b/lg list [game] &7- lobbygames.command"
+cmd-help-tp: "&b/lg tp <game> <arena ID> &7- lobbygames.command"
+cmd-help-kick: "&b/lg kick <player> &7- lobbygames.kickplayer"
+cmd-help-clearstands: "&b/lg clearstands <game> <arena ID> &7- lobbygames.admin"
+cmd-help-create: "&b/lg create <game> &7- lobbygames.admin"
+cmd-help-delete: "&b/lg delete <game> <arena ID> &7- lobbygames.admin"
+cmd-help-leaderboard: "&b/lg leaderboard <create;clear;delete> <game> &7- lobbygames.admin"
+cmd-help-reload: "&b/lg reload &7- lobbygames.admin"
+cmd-help-gui: "&b/lg gui &7- lobbygames.admin &6&l[NEW]"
+
+# Leaderboard command messages
+cmd-lb-title: "&3&lLeaderboard Commands:"
+cmd-lb-create-cmd: "&b/lg leaderboard create <game> &7- Create global leaderboard"
+cmd-lb-clearplayer-cmd: "&b/lg leaderboard clearplayer <player> <game> &7- Clear player record"
+cmd-lb-clear-cmd: "&b/lg leaderboard clear <game> &7- Clear leaderboard"
+cmd-lb-delete-cmd: "&b/lg leaderboard delete <game> [id] &7- Delete leaderboard"
+cmd-lb-note: "&7This command only applies to global leaderboards"
+
+# Error messages
+cmd-error-invalid-game-type: "&4Error: &c'%game%' is not a valid game type!"
+cmd-error-not-number: "&4Error: &c'%value%' is not a number!"
+cmd-error-arena-not-found: "&4Error: &cThere is no %game% arena with ID %id%!"
+cmd-error-join-disabled: "&4Error: &cThis command is disabled in config (lg-join-cmd-enabled)"
+cmd-error-arena-in-progress: "&4Error: &cThis arena has a game in progress!"
+cmd-error-delete-failed: "&4Error: &cCould not delete this arena!"
+cmd-error-confirm-expired: "&4Error: &cThis confirmation has expired!"
+cmd-error-not-editing: "&4Error: &cYou must be in editing mode to do this! Use &n/lg create"
+cmd-error-coords-invalid: "&4Error: &cInvalid coordinates (uncaught error in set stage)"
+cmd-error-player-not-in-game: "&4Error: &c%player% is not in a game!"
+cmd-error-player-offline: "&4Error: &cThis player is not online!"
+cmd-error-unknown-game: "&4Error: &cUnknown game '%game%'"
+cmd-error-no-local-leaderboard: "&4Error: &cThis arena does not have a local leaderboard!"
+cmd-error-leaderboard-exists: "&4Error: &cThere is already a leaderboard at this location!"
+cmd-error-player-not-found: "&4Error: &cCould not find player '%player%'!"
+cmd-error-no-global-leaderboards: "&4Error: &cThere are no global leaderboards for this game type!"
+cmd-error-leaderboard-not-exist: "&4Error: &cGlobal leaderboard #%id% does not exist for this game type!"
+
+# Usage messages
+cmd-usage-join: "&4Usage: &c/lg join <game> [arena ID]"
+cmd-usage-delete: "&4Usage: &c/lg delete <game> <arena ID>"
+cmd-usage-create: "&4Usage: &c/lg create <game type>"
+cmd-usage-tp: "&4Usage: &c/lg tp <game> <arena ID>"
+cmd-usage-kick: "&4Usage: &c/lg kick <player>"
+cmd-usage-set: "&4Usage: &c\"/lg set\" or \"/lg set leaderboard\""
+cmd-usage-lb-create: "&4Usage: &c/lg leaderboard create <game>"
+cmd-usage-lb-clearplayer: "&4Usage: &c/lg leaderboard clearplayer <player> <game>"
+cmd-usage-lb-clear: "&4Usage: &c/lg leaderboard clear <game> [id]"
+cmd-usage-lb-delete: "&4Usage: &c/lg leaderboard delete <game> [id]"
+
+# Warning messages
+cmd-warning-arena-active: "&6Warning: &eThis arena currently has a game in progress."
+cmd-warning-id-shift: "&6Warning: &eAll %game% arenas with ID greater than %id% will shift down by 1!"
+
+# Success messages
+cmd-clearstands-success: "&aCleared armor stands for this arena"
+cmd-delete-confirm: "&cAre you sure you want to delete this arena? Type /lg confirm"
+cmd-delete-success: "&bArena deleted. Note: All %game% arenas with greater IDs have shifted down by 1."
+cmd-deleted-unfinished: "&7Deleted unfinished arena (type: %type%)"
+cmd-set-location-success: "&aSuccessfully set &b%type%&a location!"
+cmd-save-success: "&2Success! &aUse &b/lg join %game%%id%&a to test this arena"
+cmd-quit-editing: "&7Abandoned unfinished arena data, exited editing mode."
+cmd-kick-player: "&7You were kicked from the game by %player%"
+cmd-kick-success: "&aSuccessfully kicked %player% from the game!"
+cmd-list-summary: "&aLobbyGames Arena Summary:"
+cmd-list-game-count: "&b%game%: &3%count% arenas"
+cmd-list-game-arenas: "&aLobbyGames %game% Arenas:"
+cmd-list-arena-info: "&a#%id%: &b'&o%world%&b'%coords%"
+cmd-lb-create-success: "&aSuccessfully added global leaderboard for %game%"
+cmd-lb-clearplayer-success: "&aRemoved %player% from %game% leaderboards!"
+cmd-lb-clear-local-success: "&aSuccessfully cleared local leaderboard for this arena!"
+cmd-lb-clear-global-success: "&aSuccessfully cleared global leaderboard for %game%"
+cmd-lb-delete-success: "&aSuccessfully deleted local leaderboard for this arena!"
+cmd-lb-delete-global-success: "&aSuccessfully deleted global leaderboard for %game%"
+cmd-error-unknown-subcommand: "&cUnknown subcommand."
+cmd-usage-clearboard: "&4Usage: &c/lg clearboard <game> <arena ID> &7(reset leaderboard)"
+cmd-error-unknown-command: "&cUnknown command."
+cmd-error-must-be-player: "&cYou must be a player to do this!"
+cmd-error-alias-disabled: "&4Error: &cLobbyGames alias commands are disabled in config! (alias-commands-enabled)"
+
+# ===== Arena Creation Messages =====
+create-editing-mode: "\n&bYou are now in editing mode! Use &n/lg quit&b to exit."
+create-step1: "&2Step 1: &aGo to the &b%location%&a of the arena and run &b/lg set"
+create-step2-spawn: "&2Step 2: &aGo to the arena's &bspawn point&a and run &b/lg set"
+create-step2-topright: "&2Step 2: &aGo to the &btop right corner&a of the arena and run &b/lg set"
+create-step3-spawn: "&2Step 3: &aGo to the arena's &bspawn point&a and run &b/lg set"
+create-step4-soccer-net: "&2Step 4: &aGo to the &btop right corner&a of the &bred soccer net&a and run &b/lg set"
+create-step5-net-corner: "&2Step 5: &aGo to the &bbottom left corner&a of the same net and run &b/lg set"
+create-locations-set: "&2Locations set!"
+create-locations-set-leaderboard: "&2Locations set! &aTo add a local leaderboard for this arena, use &b/lg set leaderboard"
+create-add-leaderboard-hint: "&aTo add a local leaderboard for this arena, use &b/lg set leaderboard"
+create-important-save: "&c&lIMPORTANT: &aDon't forget to use &b/lg save&a to save this arena!"
+create-all-set-save: "&aAll locations set, make sure to use &b/lg save&a to save the new arena"
+create-error-points-not-set: "&4Error: &cNot all points have been set!"
+create-error-invalid-coords: "&4Error: &cThese coordinates are invalid. Coordinates must form 2 corners of a flat square in the same world."
+create-error-must-be-flat: "&4Error: &cThis game type requires the arena to be flat on the ground."
+create-error-sudoku-size: "&4Error: &cSudoku must be a 9x9 arena"
+create-error-tictactoe-size: "&4Error: &cTic Tac Toe must be a 3x3 arena"
+create-error-pool-size: "&4Error: &cPool must be 3x4 or 3x5 in size!"
+create-error-must-be-vertical: "&4Error: &cThis game must be vertical (on a wall)!"
+create-error-min-size: "&4Error: &cMinimum width and height is 6 blocks! (Recommended size is 7x6)"
+create-error-max-size: "&4Error: &cMaximum width and height is 50 blocks! (Recommended size is 7x6)"
+create-error-too-small: "&4Error: &cThis game must have a width and height of at least %size% blocks."
+create-error-too-large: "&4Error: &cArena width cannot be greater than %size% blocks!"
+create-note-no-second-location: "&6Note: &eThis game does not require a second location!"
+create-error-net-outside: "&4Error: &cThe corners of the soccer net must be outside the arena selection!"
+create-error-net-height: "&4Error: &cThe net must be at least 3 blocks tall! (This location should be off the ground)"
+create-error-corners-first: "&4Error: &cThe corners of the arena must be defined first!"
+create-error-no-special-location: "&4Error: &cThis game type does not use this location."
+create-error-net-neighbor: "&4Error: &cOne of the net locations must neighbor the arena!"
+create-error-same-y-level: "&4Error: &cThis location must be at the same Y value as the arena floor!"
+create-error-corners-before-spawn: "&4Error: &cThe corners of the arena must be set before the spawn point!"
+create-error-spawn-inside: "&4Error: &cThe spawn point cannot be inside the arena! (This is where eliminated players are teleported.)"
+create-error-center-before-spawn: "&4Error: &cThe arena center point must be set before the clicker spawn point!"
+create-error-spawn-same-as-center: "&4Error: &cThe spawn point cannot be the same as the center point!"
+create-error-location1-view: "&4Error: &cLocation 1 must be the&o bottom left&c location relative to the player's view"
+create-error-no-local-leaderboard-multiplayer: "&4Error: &cLocal leaderboards are not supported for multiplayer games."
+
+# ===== Console Command Messages =====
+console-error-player-offline: "&4Error: &c%player% is not online!"
+console-usage-forcejoin: "&4Usage: &c/%command% <player> <game> [arena ID]"
+
+#----------------------------------------------------------------------------------------------------------------------#
+#
+#  [JOIN] signs:
+#  To create a clickable sign to join an arena, use the following format:
+#    |                   |
+#    |       [JOIN]      |
+#    | <GameType>:<Data> |
+#    |                   |
+#  For the <Data> section, the following can be used:
+#    Case A: Join the first available arena (Default, if <Data> is left blank)
+#    Case B: Join the nearest arena relative to the sign location
+#    [Number]: Join a specific arena id (Ex: "Tic Tac Toe:4")
+#
+#  Example: (Joins the nearest soccer arena)
+#    |                   |
+#    |       [JOIN]      |
+#    |      Soccer:B     |
+#    |                   |
+#
+#----------------------------------------------------------------------------------------------------------------------#
+
+#If you enjoy this plugin, please leave a review :D

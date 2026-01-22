@@ -1,0 +1,48 @@
+#----------------------------------------------------------------------------------------------------------------------#
+#
+#  This is the LobbyGames rewards file. Use this to configure how games will handle running 
+#  commands after a player finishes a game.
+#
+#----------------------------------------------------------------------------------------------------------------------#
+
+snake:
+  any-reward-name-here:
+    enabled: false
+    min-score: 40
+    console-commands:
+      - "broadcast &2&l%player%&a got a score of %score% in snake!"
+      - "eco give %player% 10000"
+  first-time-reward-example:
+    enabled: false
+    one-time: true #A player can only ever get this reward once with this option
+    message: "&bYou completed your first snake game!"
+    console-commands:
+      - "eco give %player% 100"
+
+pool:
+  simple-multiplayer-example:
+    enabled: false
+    for-winning-player: true #only give this reward for the player who won (default is false)
+    console-commands:
+      - "eco give %player% 100"
+
+soccer:
+  teleport-to-spawn-example:
+    enabled: false
+    per-player: true #'true' runs this command on every player in the game (default)
+    run-on-quit: true #if the reward/command should be given every time the player leaves the game, even if it has not started (ex. for teleporting player back to spawn)
+    console-commands:
+      - "minecraft:tp %player% 100 100 100 0 0"
+  no-per-player-example:
+    enabled: false
+    per-player: false #run once when the game ends instead of for every player. Can not use %player% when this is set to false
+    console-commands:
+      - "broadcast &b%winners% won against %losers% in Soccer!"
+
+2048:
+clicker:
+connect4:
+minesweeper:
+spleef:
+sudoku:
+tictactoe:

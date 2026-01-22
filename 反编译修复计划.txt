@@ -1,0 +1,52 @@
+LobbyGames 反编译代码修复计划
+================================
+
+当前状态：
+- CFR 反编译：100+ 错误
+- Procyon 反编译：71 错误（最佳）
+- Fernflower 反编译：Game.java 和 Clicker.java 失败
+
+使用 Procyon 反编译结果，需要修复 71 个错误
+
+错误分类：
+----------
+
+1. InsnComment 注解问题（2个）
+   - Game.java:336
+   - Clicker.java:119
+   解决方案：删除 @InsnComment 注解和 import
+
+2. loadConfig0() 方法不存在（1个）
+   - LobbyGames.java:136
+   解决方案：删除此行或注释掉
+
+3. Lambda 表达式变量名错误（多个）
+   - Game.java:261 - player2, s2 未定义
+   - LobbyGames.java - consumer2, gameType2, player2, uuid 等未定义
+   解决方案：修复 lambda 表达式中的变量名
+
+4. 类型转换问题（多个）
+   - Object 无法转换为具体类型
+   解决方案：添加正确的类型转换
+
+5. BukkitRunnable 构造器问题（3个）
+   - Spleef.java:161
+   - Soccer.java:452
+   - Connect4.java:277
+   解决方案：修复匿名内部类的构造
+
+6. 缺少方法（多个）
+   - Soccer.java - getPlugin()
+   - Sudoku.java - getPixel(int,int)
+   解决方案：使用正确的方法调用
+
+修复策略：
+----------
+1. 先修复简单的问题（删除注解、修复 loadConfig0）
+2. 修复 lambda 表达式变量名
+3. 修复类型转换
+4. 修复 BukkitRunnable 构造器
+5. 修复缺少的方法调用
+6. 最后编译测试
+
+预计修复时间：需要逐个文件手动修复

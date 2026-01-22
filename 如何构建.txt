@@ -1,0 +1,46 @@
+LobbyGames Maven 项目构建指南
+================================
+
+项目已经准备好，但还没有构建 JAR 文件。
+
+在 IntelliJ IDEA 中构建步骤：
+--------------------------------
+
+1. 用 IDEA 打开这个文件夹
+   - 打开 IDEA
+   - File -> Open
+   - 选择这个文件夹（包含 pom.xml）
+   - 点击 OK
+
+2. 等待 Maven 导入完成
+   - IDEA 会自动识别 Maven 项目
+   - 右下角会显示 "Importing..." 进度
+   - 等待所有依赖下载完成
+
+3. 构建 JAR 文件
+   方法一（推荐）：
+   - 点击右侧的 "Maven" 标签
+   - 展开你的项目名称
+   - 展开 "Lifecycle"
+   - 双击 "clean"（清理）
+   - 双击 "package"（打包）
+   
+   方法二：
+   - 点击顶部菜单 Build -> Build Project
+
+4. 查找生成的 JAR
+   构建成功后，JAR 文件在：
+   target/LobbyGames-2.3.0.jar
+
+注意事项：
+----------
+- 第一次构建会下载很多依赖，需要等待
+- 如果编译出错，可能是反编译代码的问题，需要手动修复
+- 确保你的 IDEA 已经配置了 JDK 8 或更高版本
+
+当前项目结构：
+-------------
+pom.xml              - Maven 配置
+decompiled/          - 反编译的源代码
+src/main/resources/  - 资源文件（plugin.yml, config.yml, rewards.yml）
+BUILD.md             - 详细构建说明

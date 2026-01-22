@@ -1,0 +1,45 @@
+LobbyGames 反编译项目 - 编译错误说明
+==========================================
+
+Maven 构建已完成依赖下载，但编译时出现 13 个错误。
+这是反编译代码的常见问题，需要手动修复。
+
+错误列表：
+----------
+
+1. LobbyGamesCommand.java:366 - 非法的表达式
+2-12. 多个文件中的 'this' 参数问题（Soccer.java, T048.java, Spleef.java, Clicker.java）
+13. Pool.java:1140 - 使用了 Java 14 的 switch 表达式，但项目配置为 Java 8
+
+解决方案：
+----------
+
+方案一：升级 Java 版本（推荐）
+修改 pom.xml 中的 Java 版本：
+<maven.compiler.source>14</maven.compiler.source>
+<maven.compiler.target>14</maven.compiler.target>
+
+方案二：手动修复反编译错误
+需要逐个文件修复语法错误，这需要 Java 编程经验。
+
+方案三：使用原始 JAR
+如果只是想使用插件，直接使用原始的 LobbyGames-2.3.0.jar 文件即可。
+
+当前状态：
+----------
+✓ Maven 项目结构已创建
+✓ 所有依赖已下载
+✓ 源代码已反编译
+✗ 编译失败（需要修复反编译错误）
+
+项目文件位置：
+--------------
+- 源代码：decompiled/me/c7dev/lobbygames/
+- Maven 配置：pom.xml
+- 资源文件：src/main/resources/
+- 原始 JAR：LobbyGames-2.3.0.jar
+
+注意：
+------
+反编译的代码通常不能 100% 还原原始源代码，
+某些复杂的语法结构可能需要手动调整才能编译通过。

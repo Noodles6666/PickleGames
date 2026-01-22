@@ -1,0 +1,227 @@
+# LobbyGames 完整汉化配置
+
+## 由于配置文件过大，这里提供关键翻译对照表
+## 请将以下内容替换到 config.yml 中对应的位置
+
+## ===== 通用消息 =====
+no-permission: "&c你没有权限！"
+cooldown-msg: "&c你必须等待 %seconds% 秒才能执行此操作！"
+countdown-format: "&e游戏将在 &c%seconds% &e秒后开始！"
+waiting-players: "&c等待更多玩家加入..."
+quit-item-title: "&c&l退出"
+
+## ===== 错误消息 =====
+error-already-in-game: "&4错误：&c你已经在游戏中了，使用 /lg quit 退出"
+error-must-be-in-game: "&4错误：&c你必须在游戏中才能执行此操作！"
+error-no-arenas-available: "&4错误：&c此游戏没有可用的竞技场！"
+error-arena-in-use: "&4错误：&c此竞技场已被占用！"
+error-arena-not-exist: "&4错误：&c此竞技场不存在！"
+error-wrong-world: "&4错误：&c你无法从此世界访问此竞技场！"
+not-enough-balance: "&c此游戏需要花费 $%cost% 才能游玩！"
+restart-confirmation: "&c你确定要重新开始吗？"
+afk-kick-msg: "&c你因挂机被踢出 %game%！"
+
+## ===== 通用文本 =====
+yes-text: "&a&l是"
+no-text: "&c&l否"
+your-turn-msg: "&a你的回合"
+opponent-turn-msg: "&7对手的回合"
+status-translate: "开放, 等待中, 使用中"
+command-blocked-msg: "&c你在游戏中无法使用此命令！"
+
+## ===== 排行榜 =====
+leaderboard-title: "&2&l%game% 排行榜："
+leaderboard-format: "&b%ranking%: &a%player% &6%score%"
+
+## ===== 2048 游戏 =====
+2048:
+  game-alias: "2048"
+  action-bar: "&a分数：&f%score%"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l2048：&b使用 W、A、S、D 键合并方块，在填满棋盘前达到 2048 方块！
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &b&l没有可用的移动了！&b分数：&f %score% 点
+    &3&m----------------------------------------
+
+## ===== 点击游戏 (Clicker) =====
+clicker:
+  game-alias: "点击游戏"
+  green-blocks: "&a点击！"
+  red-blocks: "&c不要点击！"
+  score-format: "&a&l分数：&f&l%score% &6(剩余 %remaining%)"
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l分数：&f%score%
+    &2&m----------------------------------------
+
+## ===== 四子棋 (Connect4) =====
+connect4:
+  game-alias: "四子棋"
+  translatable-words: "红色, 黄色"
+  side-msg: "&b你正在使用 %side% 棋子！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l四子棋：&b在棋盘顶部添加棋子，尝试在任意行、列或对角线上连接 4 个你的颜色！
+    &3&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&l这局游戏平局！
+    &2&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了四子棋游戏！
+    &6&m----------------------------------------
+
+## ===== 扫雷 (Minesweeper) =====
+minesweeper:
+  game-alias: "扫雷"
+  wand-title: "&c&l设置旗帜"
+  action-bar: "&4&l%remaining_mines%&c 个地雷剩余！&c&l%time%"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l扫雷：&b网格中随机分布了 %starting_mines% 个地雷！右键打开格子，使用旗帜工具标记地雷。数字表示该格子周围有多少个地雷！
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &c&l轰！你点到地雷了！
+    &b分数：&f%minutes% 分 %seconds% 秒（剩余 %remaining_mines% 个地雷）
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l你赢了！
+    &a分数：&f%minutes% 分 %seconds% 秒
+    &2&m----------------------------------------
+
+## ===== 台球 (Pool) =====
+pool:
+  game-alias: "台球"
+  translatable-words: "球, 母球, 入袋, 羊毛, 陶瓦"
+  translatable-power-words: "&a低力量, &e中等力量, &6高力量, &c最高力量"
+  pocketed-8ball: "&c8号球入袋了！"
+  pocketed-all-balls: "&a所有球都入袋了！"
+  redo-break: "&b这次开球力量不够，再试一次！"
+  side-designation: "&b你需要将 &b&l%side%&b 球打入袋中！"
+  cueball-title: "&f&l母球 &7(点击桌面任意位置)"
+  cueball-description: "&7用球杆击打这个球"
+  cueball-inhand: "&b%player% 拿到了母球！"
+  8ball-description: "&7在打入所有指定球后\n&7&c才能&7打入这个球！"
+  cue-item-title: "&3球杆 &7(点击白色母球)"
+  open-gui-item-title: "&b打开台球菜单"
+  gui-title: "台球状态"
+  practice-mode-msg: "&a等待对手时可以练习！"
+  exit-practice-mode: "&c退出练习模式"
+  pocketed-balls: |
+    &3%name% 打入了 %count% 个球：
+    &b  羊毛：&f%solids_pocketed%
+    &b  陶瓦：&f%stripes_pocketed%
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l台球：&b击打（白色）母球来打入其他球！在打入所有指定球之前不要打入（黑色）8号球。
+    &3&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了台球游戏！
+    &6&m----------------------------------------
+
+## ===== 贪吃蛇 (Snake) =====
+snake:
+  game-alias: "贪吃蛇"
+  action-bar: "&b%score% 个苹果"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l贪吃蛇：&b吃苹果来变长，但不要撞到墙壁或自己！使用 W、A、S、D 键移动！
+    &3&m----------------------------------------
+  end-msg: |
+    &3&m----------------------------------------
+    &c&l%reason%
+    &b分数：&f %score% 个苹果
+    &3&m----------------------------------------
+  hit-wall-msg: '&c&l你撞到墙了！'
+  ran-into-self-msg: '&c&l你撞到自己了！'
+
+## ===== 足球 (Soccer) =====
+soccer:
+  game-alias: "足球"
+  action-bar: "%score%"
+  boost-jump-title: "&a&l加速跳跃 &7(右键)"
+  ball-respawn-msg: "&e球将在 &c%seconds% &e秒后重生！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l足球：&b将球踢进对方球门得分！先得 10 分获胜！
+    &3&m----------------------------------------
+    &a游戏开始了！"
+  team1-join-title: "&b加入蓝队 &7(右键)"
+  team1-wool-title: "&b你在 &b&l蓝队&b！"
+  team1-score-msg: "&9&l蓝队进球了！&7[ %score% &7]"
+  team1-win-msg: |
+    &3&m----------------------------------------
+    &b蓝队赢得了比赛！
+    &3&m----------------------------------------
+  team2-join-title: "&c加入红队 &7(右键)"
+  team2-wool-title: "&c你在 &c&l红队&c！"
+  team2-score-msg: "&c&l红队进球了！&7[ %score% &7]"
+  team2-win-msg: |
+    &4&m----------------------------------------
+    &c红队赢得了比赛！
+    &4&m----------------------------------------
+  score-format: "&9&l%team1_score%&7&l - &c&l%team2_score%"
+
+## ===== 雪地大战 (Spleef) =====
+spleef:
+  game-alias: "雪地大战"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l雪地大战：&b使用铲子破坏雪块，不要掉到表面以下！最后站立的人获胜！
+    &3&m----------------------------------------
+  player-eliminated-msg: "&e%eliminated_player% &c被淘汰了！&6还剩 %remaining% 名玩家！"
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了雪地大战！
+    &6&m----------------------------------------
+  blocks-melting-msg: "&c方块开始融化了！"
+  blocks-melting-seconds-msg: "&e方块将在 &c%seconds%&e 秒后开始融化！"
+
+## ===== 数独 (Sudoku) =====
+sudoku:
+  game-alias: "数独"
+  action-bar: "&a时间：&f%time%"
+  invalid-solution: "&c无效的解答！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l数独：&b填入数字，使每行、每列和每个 3x3 方格都包含 1 到 9 的所有数字！
+    &3&m----------------------------------------
+  win-msg: |
+    &2&m----------------------------------------
+    &a&l你完成了数独！&a时间：%time%
+    &2&m----------------------------------------
+
+## ===== 井字棋 (TicTacToe) =====
+tictactoe:
+  game-alias: "井字棋"
+  join-side-title: "&b切换到 %side%"
+  now-playing-as: "&b你将使用 %side%！"
+  side-msg: "&b你正在使用 %side%！"
+  start-msg: |
+    &3&m----------------------------------------
+    &b&l井字棋：&b连成三个 X 或三个 O 即可获胜！
+    &3&m----------------------------------------
+  draw-msg: |
+    &2&m----------------------------------------
+    &a&l这局游戏平局！
+    &2&m----------------------------------------
+  win-msg: |
+    &6&m----------------------------------------
+    &e&l%winner% &e赢得了井字棋游戏！
+    &6&m----------------------------------------
+
+## ===== 告示牌文本 =====
+join-sign-text: "加入"
+
+## ===== 使用说明 =====
+# 1. 将上述内容复制到 src/main/resources/config.yml 中对应位置
+# 2. 重新编译插件：mvn clean package
+# 3. 替换服务器上的 JAR 文件
+# 4. 重载插件：/lg reload
