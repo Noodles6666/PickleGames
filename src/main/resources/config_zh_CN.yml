@@ -344,6 +344,7 @@ cmd-help-list: "&e▶ &b/pg list [游戏] &7- 查看竞技场列表 &8(picklegam
 cmd-help-tp: "&e▶ &b/pg tp <游戏> <竞技场ID> &7- 传送到竞技场 &8(picklegames.command)"
 cmd-help-kick: "&e▶ &b/pg kick <玩家> &7- 踢出玩家 &8(picklegames.kickplayer)"
 cmd-help-clearstands: "&e▶ &b/pg clearstands <游戏> <竞技场ID> &7- 清除盔甲架 &8(picklegames.admin)"
+cmd-help-pooloffset: "&e▶ &b/pg pooloffset <cue|color> <值> &7- 调整台球位置 &8(picklegames.admin) &d&l✨台球位置调整"
 cmd-help-create: "&e▶ &b/pg create <游戏> &7- 创建竞技场 &8(picklegames.admin)"
 cmd-help-delete: "&e▶ &b/pg delete <游戏> <竞技场ID> &7- 删除竞技场 &8(picklegames.admin)"
 cmd-help-leaderboard: "&e▶ &b/pg leaderboard <create;clear;delete> <游戏> &7- 排行榜管理 &8(picklegames.admin)"

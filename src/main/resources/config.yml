@@ -149,6 +149,12 @@ pool:
   stripes-color: RED #if same-color is enabled
   cue-blaze-rod: false #alternate cue item
   particles-enabled: true
+  # 台球位置调整 - 如果球的位置不正确，可以调整这些值
+  # 数值越大，球越靠近台球桌中心；数值越小，球越靠近边缘
+  # 默认值：白球 -1.0（向外偏移），彩球 0.0（居中）
+  # 支持负数偏移，负数表示向外（远离中心）
+  cue-ball-offset: -1 #白球位置偏移，-1表示使用默认值（-1.0）
+  color-ball-offset: -1 #彩球位置偏移，-1表示使用默认值（0.0）
   translatable-words: "Ball, Cue Ball, Pocketed, Wool, Terracotta" #Default (Keep the commas): "Ball, Cue Ball, Pocketed, Wool, Terracotta"
   translatable-power-words: "&aLow Power, &eMedium Power, &6High Power, &cHighest Power"
   pocketed-8ball: "&cThe 8-ball was pocketed!"
@@ -323,6 +329,7 @@ cmd-help-list: "&b/lg list [game] &7- lobbygames.command"
 cmd-help-tp: "&b/lg tp <game> <arena ID> &7- lobbygames.command"
 cmd-help-kick: "&b/lg kick <player> &7- lobbygames.kickplayer"
 cmd-help-clearstands: "&b/lg clearstands <game> <arena ID> &7- lobbygames.admin"
+cmd-help-pooloffset: "&b/lg pooloffset <cue|color> <value> &7- lobbygames.admin &6&l[Pool Position Adjust]"
 cmd-help-create: "&b/lg create <game> &7- lobbygames.admin"
 cmd-help-delete: "&b/lg delete <game> <arena ID> &7- lobbygames.admin"
 cmd-help-leaderboard: "&b/lg leaderboard <create;clear;delete> <game> &7- lobbygames.admin"

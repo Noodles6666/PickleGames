@@ -65,8 +65,25 @@ decompiled/
 temp_verify/
 decompiled_fernflower/
 
-# Reports and documentation (optional, remove if you want to include them)
-*.md
+# Reports and documentation
+*修复报告*.md
+*检查报告*.md
+*进度*.md
+*总结*.md
+*指南*.md
+*说明*.md
+Bug*.md
+当前状态总结.txt
+完美重建分析报告.md
+反编译*.txt
+修复进度.txt
+汉化*.txt
+LobbyGames汉化配置.txt
+如何*.md
+构建指南.md
+编译*.md
+添加新游戏指南.md
 !README.md
 !CHANGELOG.md
 !LICENSE.md
+!BUILD.md
